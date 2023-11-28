@@ -1,3 +1,4 @@
+// Added additional property to post objects to record bool 'liked' 
 const posts = [
     {
         name: "Vincent van Gogh",
@@ -34,8 +35,8 @@ const posts = [
 // Init
 const mainEl = document.getElementById('container-all-posts')
 
+// Functionality
 document.addEventListener('click', (event) => {
-    // Console.log(event.target)
     const likedPostID = event.target.dataset.postid
 
     if (likedPostID) {
@@ -44,21 +45,17 @@ document.addEventListener('click', (event) => {
         if (operation === 'like') {
             // Set up variables
             const likedPostLikesEl = document.getElementById(`likes-for-post${likedPostID}`)
-            const likeEl = document.getElementById('img-like')
             let likes = posts[likedPostID].likes
             let liked = posts[likedPostID].liked
             
-            // Toggle liked
-            console.log(liked = !liked)
+            // Toggle like
+            liked = !liked
             
             // Increment or decrement depending on if we liked or unliked
             liked ? likes++ : likes--
 
-            // Update the DOM
-            // likedPostLikesEl.textContent = `${likes} likes` 
             posts[likedPostID].likes = likes
             posts[likedPostID].liked = liked
-
             renderPosts(getHTML(posts))
         }
     }
@@ -69,50 +66,53 @@ function getHTML(posts) {
     for (const [index, post] of posts.entries()) {
         const div = `
             <div class="container-single-post">
-                            <div class="header-post">
-                                <img class="avatar-user" src="${post.avatar}">
-                                <div>
-                                    <p class="p-user-data">
-                                        <span class="bold">
-                                            ${post.name}
-                                        </span>
-                                        <span class="location">
-                                            ${post.location}
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <img class="img-post" src="${post.post}">
-                            <div class="footer-post">
-                                <div class="container-buttons">
-                                    <img 
-                                        class="btn btn-like"
-                                        src="${
-                                            post.liked ? 'images/icon-full-heart.png' : 'images/icon-heart.png'
-                                        }" 
-                                        data-operation=like
-                                        data-postid=${index}
-                                        draggable=false
-                                    >
-                                        <img class="btn" id="img-like" src="images/icon-comment.png" draggable=false>
-                                        <img src="images/icon-dm.png" class="btn" draggable=false>
-                                </div>
-                                <div>
-                                    <p
-                                        class="p-footer bold" 
-                                        id="likes-for-post${index}"
-                                    > 
-                                        ${post.likes} likes
-                                    </p>
-                                    <p class="p-footer">
-                                        <span class="bold">
-                                            ${post.username}&nbsp;
-                                        </span>
-                                        ${post.comment}
-                                    </p>
-                                </div>
-                            </div>
+                <div class="header-post">
+                    <img class="avatar-user" src="${post.avatar}" alt="Avatar picture for ${post.name}">
+                    <div>
+                        <p class="p-user-data">
+                            <span class="bold">
+                                ${post.name}
+                            </span>
+                            <span class="location">
+                                ${post.location}
+                            </span>
+                        </p>
                     </div>
+                </div>
+                <img class="img-post" src="${post.post}" alt="Selfie featuring ${post.username}.">
+                <div class="footer-post">
+                    <div class="container-buttons">
+                        <img 
+                            class="${
+                                post.liked ? 'btn-no-hover' : 'btn'
+                            }"
+                            src="${
+                                post.liked ? 'images/icon-full-heart.png' : 'images/icon-heart.png'
+                            }" 
+                            data-operation=like
+                            data-postid=${index}
+                            alt="Like button"
+                            draggable=false
+                        >
+                            <img class="btn" src="images/icon-comment.png" draggable=false alt="Comment button">
+                            <img src="images/icon-dm.png" class="btn" draggable=false alt="DM button">
+                    </div>
+                    <div>
+                        <p
+                            class="p-footer bold" 
+                            id="likes-for-post${index}"
+                        > 
+                            ${post.likes} likes
+                        </p>
+                        <p class="p-footer">
+                            <span class="bold">
+                                ${post.username}&nbsp;
+                            </span>
+                            ${post.comment}
+                        </p>
+                    </div>
+                </div>
+            </div>
         `
         html += div
     }
@@ -123,7 +123,6 @@ function getHTML(posts) {
 function renderPosts(html) {
     clearPosts()
     mainEl.innerHTML += html
-    console.log('called')
 }
 
 function clearPosts() {

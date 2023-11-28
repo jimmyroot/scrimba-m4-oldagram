@@ -1,5 +1,6 @@
 *, *::after, *::before { box-sizing: inherit }
 
+/* Global styles and type */
 html, body {
     background: #ededed;
     box-sizing: border-box;
@@ -10,16 +11,14 @@ html, body {
 html,
 body,
 p,
+avatar-user, 
 .logo {
     margin: 0;
     padding: 0;
 }
 
-
-
-/* Header area (mostly) */
+/* Header and main content holder */
 header, main {
-    /* background: #fff; */
     width: 375px;
     margin: 0 auto;
 }
@@ -40,17 +39,14 @@ header {
 
 .logo {
     width: 127px;
-    margin: 0;
-    padding: 0;
 }
 
 .avatar-user {
     width: 34px;
     border-radius: 100%;
-    margin: 0;
 }
 
-/* Main content */
+/* Post styles */
 .container-single-post {
     margin-bottom: 25px;
 }
@@ -79,7 +75,7 @@ header {
     width: 100%;
     margin-bottom: 0;
 }
-/* Footer */
+/* Post footer */
 .footer-post {
     padding: 13px 13px;
     display: flex;
@@ -91,16 +87,12 @@ header {
     margin-top: 10px;
 }
 
-.btn {
+.btn, .btn-no-hover {
     width: 25px;
-    margin-right: 12px;   
+    margin-right: 12px; 
+    cursor: pointer;  
 }
 
-.btn-like {
-    cursor: pointer;
-}
-
-/* Utility classes */
-.x {
-    border: 1px solid hotpink;
+.btn:hover {
+    opacity: .5;
 }
