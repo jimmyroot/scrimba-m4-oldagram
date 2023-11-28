@@ -35,32 +35,39 @@ const posts = [
 const mainEl = document.getElementById('container-all-posts')
 
 document.addEventListener('click', (event) => {
-    // console.log(event.target)
-    const operation = event.target.dataset.operation
-    if (operation === 'like') {
-        // Set up variables
-        const likedPostID = event.target.dataset.postid
-        const likedPostLikesEl = document.getElementById(`likes-for-post${likedPostID}`)
-        let likes = posts[likedPostID].likes
-        let liked = posts[likedPostID].liked
-        
-        // Toggle liked
-        liked = !liked
-        
-        // Increment or decrement depending on if we liked or unliked
-        liked ? likes++ : likes--
+    // Console.log(event.target)
+    const likedPostID = event.target.dataset.postid
 
-        // Update the DOM
-        likedPostLikesEl.textContent = `${likes} likes` 
-        posts[likedPostID].likes = likes
-        posts[likedPostID].liked = liked
-        console.log(posts[likedPostID].likes, posts[likedPostID].liked)
+    if (likedPostID) {
+        // set operation (only using one now but could use for more functionality)
+        const operation = event.target.dataset.operation
+        if (operation === 'like') {
+            // Set up variables
+            const likedPostLikesEl = document.getElementById(`likes-for-post${likedPostID}`)
+            const likeEl = document.getElementById('img-like')
+            let likes = posts[likedPostID].likes
+            let liked = posts[likedPostID].liked
+            
+            // Toggle liked
+            console.log(liked = !liked)
+            
+            // Increment or decrement depending on if we liked or unliked
+            liked ? likes++ : likes--
+
+            // Update the DOM
+            // likedPostLikesEl.textContent = `${likes} likes` 
+            posts[likedPostID].likes = likes
+            posts[likedPostID].liked = liked
+
+            renderPosts(getHTML(posts))
+        }
     }
 })
 
-function renderPosts() {
+function getHTML(posts) {
+    let html = ``
     for (const [index, post] of posts.entries()) {
-        const html = `
+        const div = `
             <div class="container-single-post">
                             <div class="header-post">
                                 <img class="avatar-user" src="${post.avatar}">
@@ -75,22 +82,23 @@ function renderPosts() {
                                     </p>
                                 </div>
                             </div>
-                            
                             <img class="img-post" src="${post.post}">
-                            
                             <div class="footer-post">
                                 <div class="container-buttons">
                                     <img 
-                                        src="images/icon-heart.png" 
-                                        class="btn btn-like" 
+                                        class="btn btn-like"
+                                        src="${
+                                            post.liked ? 'images/icon-full-heart.png' : 'images/icon-heart.png'
+                                        }" 
                                         data-operation=like
                                         data-postid=${index}
+                                        draggable=false
                                     >
-                                        <img src="images/icon-comment.png" class="btn">
-                                    <img src="images/icon-dm.png" class="btn">
+                                        <img class="btn" id="img-like" src="images/icon-comment.png" draggable=false>
+                                        <img src="images/icon-dm.png" class="btn" draggable=false>
                                 </div>
                                 <div>
-                                    <p 
+                                    <p
                                         class="p-footer bold" 
                                         id="likes-for-post${index}"
                                     > 
@@ -106,6 +114,20 @@ function renderPosts() {
                             </div>
                     </div>
         `
-        mainEl.innerHTML += html
+        html += div
     }
+    return html
+    console.log(html)
 }
+
+function renderPosts(html) {
+    clearPosts()
+    mainEl.innerHTML += html
+    console.log('called')
+}
+
+function clearPosts() {
+    mainEl.innerHTML = ''
+}
+
+renderPosts(getHTML(posts))
